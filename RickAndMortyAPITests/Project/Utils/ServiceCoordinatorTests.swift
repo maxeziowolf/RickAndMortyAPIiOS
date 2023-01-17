@@ -9,14 +9,6 @@ import XCTest
 @testable import RickAndMortyAPI
 
 final class ServiceCoordinatorTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
     
     func testBuildCorrectURLWithoutParams() throws {
         
@@ -24,7 +16,7 @@ final class ServiceCoordinatorTests: XCTestCase {
         
         let urlTest = "www.example.com/help"
         
-        let urlGet = ServiceCoordinator.getURL(url: urlTest)
+        let urlGet = ServiceCoordinator.getURL(url: urlTest, parameters: nil)
         
         print("url correcta: \(String(describing: urlCorrect))")
         print("url obtenida: \(String(describing: urlGet))")
@@ -50,6 +42,8 @@ final class ServiceCoordinatorTests: XCTestCase {
         XCTAssertEqual(urlCorrect, urlGet, "No se obtuvo correctamente la URL con parametros")
         
     }
+    
+
     
 
 }
