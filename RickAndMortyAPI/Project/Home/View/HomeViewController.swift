@@ -14,6 +14,7 @@ class HomeViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.image = UIImage(named: "image.rickandmorty.logo")
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
     
@@ -42,6 +43,12 @@ class HomeViewController: UIViewController {
             welcomeLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             welcomeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         ])
+        
+        welcomeImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openCollection)))
+    }
+    
+    @objc func openCollection(){
+        self.navigationController?.pushViewController(CharactersViewController(nibName: nil, bundle: nil), animated: true)
     }
 
 }

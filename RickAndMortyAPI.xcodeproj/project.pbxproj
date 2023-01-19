@@ -17,6 +17,8 @@
 		D3CA8ED429765F24005BBA67 /* ServiceCoordinator+Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CA8ED329765F24005BBA67 /* ServiceCoordinator+Enums.swift */; };
 		D3CA8ED629765F85005BBA67 /* ServiceCoordinator+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CA8ED529765F85005BBA67 /* ServiceCoordinator+Extension.swift */; };
 		D3CA8ED829766054005BBA67 /* CharacterModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CA8ED729766054005BBA67 /* CharacterModal.swift */; };
+		D3CA8EDF29766381005BBA67 /* CharactersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CA8EDE29766381005BBA67 /* CharactersViewController.swift */; };
+		D3CA8EE129766A5B005BBA67 /* CharacterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CA8EE029766A5B005BBA67 /* CharacterCollectionViewCell.swift */; };
 		D3CD0AFC2973A5B700A7A1CD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CD0AFB2973A5B700A7A1CD /* HomeViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +46,8 @@
 		D3CA8ED329765F24005BBA67 /* ServiceCoordinator+Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceCoordinator+Enums.swift"; sourceTree = "<group>"; };
 		D3CA8ED529765F85005BBA67 /* ServiceCoordinator+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceCoordinator+Extension.swift"; sourceTree = "<group>"; };
 		D3CA8ED729766054005BBA67 /* CharacterModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterModal.swift; sourceTree = "<group>"; };
+		D3CA8EDE29766381005BBA67 /* CharactersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersViewController.swift; sourceTree = "<group>"; };
+		D3CA8EE029766A5B005BBA67 /* CharacterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCollectionViewCell.swift; sourceTree = "<group>"; };
 		D3CD0AFB2973A5B700A7A1CD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,12 +148,46 @@
 			path = ServiceCoordinator;
 			sourceTree = "<group>";
 		};
+		D3CA8EDA2976632C005BBA67 /* AllCharacter */ = {
+			isa = PBXGroup;
+			children = (
+				D3CA8EDB29766350005BBA67 /* View */,
+				D3CA8EDC2976635B005BBA67 /* ViewModel */,
+				D3CA8EDD29766365005BBA67 /* Model */,
+			);
+			path = AllCharacter;
+			sourceTree = "<group>";
+		};
+		D3CA8EDB29766350005BBA67 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D3CA8EDE29766381005BBA67 /* CharactersViewController.swift */,
+				D3CA8EE029766A5B005BBA67 /* CharacterCollectionViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D3CA8EDC2976635B005BBA67 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		D3CA8EDD29766365005BBA67 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		D3CD0AF32973A42E00A7A1CD /* Project */ = {
 			isa = PBXGroup;
 			children = (
 				D3CD0AF92973A4F100A7A1CD /* Utils */,
 				D3CD0AFA2973A50300A7A1CD /* DelegateApp */,
 				D3CD0AF42973A46400A7A1CD /* Home */,
+				D3CA8EDA2976632C005BBA67 /* AllCharacter */,
 			);
 			path = Project;
 			sourceTree = "<group>";
@@ -322,8 +360,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3CA8EDF29766381005BBA67 /* CharactersViewController.swift in Sources */,
 				D38602D72975EB8200B4CA5C /* ServiceCoordinator.swift in Sources */,
 				D3AD01F52973900100659748 /* AppDelegate.swift in Sources */,
+				D3CA8EE129766A5B005BBA67 /* CharacterCollectionViewCell.swift in Sources */,
 				D3CA8ED829766054005BBA67 /* CharacterModal.swift in Sources */,
 				D3AD01F72973900100659748 /* SceneDelegate.swift in Sources */,
 				D3CD0AFC2973A5B700A7A1CD /* HomeViewController.swift in Sources */,

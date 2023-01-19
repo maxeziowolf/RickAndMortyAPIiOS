@@ -33,45 +33,47 @@ public class ServiceCoordinator {
         
         let task = URLSession.shared.dataTask(with: request){ data, response, error in
             
-            if let error = error{
-                completion(.unowned(error: error.localizedDescription))
-                return
-            }
-            
-            if let response = response, let httpResponse = response as? HTTPURLResponse {
-                
-                switch httpResponse.statusCode {
-                    
-                case 100..<200:
-                    completion(.unowned(error: "Se respondio solo con informacion"))
-                    
-                case 200..<300:
-                  
-                    if let data = data {
-                        
-                        if let dataD: T = decodingRequest(data: data){
-                            completion(.success(data: dataD))
-                        }else{
-                            completion(.failed(error: .codingError))
-                        }
-                       
-                    }else{
-                        completion(.failed(error: .emptyRequest))
-                    }
-                  
-                case 300..<400:
-                    completion(.unowned(error: "Se quiere redireccionar al usuario a una nueva url"))
-                    
-                case 400..<500:
-                    completion(.failed(error: .clientError))
-                    
-                case 500..<600:
-                    completion(.failed(error: .serverError))
-                    
-                default:
-                    completion(.unowned(error: "Codigo desconocido \(httpResponse.statusCode)"))
+            DispatchQueue.main.async {
+                if let error = error{
+                    completion(.unowned(error: error.localizedDescription))
+                    return
                 }
                 
+                if let response = response, let httpResponse = response as? HTTPURLResponse {
+                    
+                    switch httpResponse.statusCode {
+                        
+                    case 100..<200:
+                        completion(.unowned(error: "Se respondio solo con informacion"))
+                        
+                    case 200..<300:
+                      
+                        if let data = data {
+                            
+                            if let dataD: T = decodingRequest(data: data){
+                                completion(.success(data: dataD))
+                            }else{
+                                completion(.failed(error: .codingError))
+                            }
+                           
+                        }else{
+                            completion(.failed(error: .emptyRequest))
+                        }
+                      
+                    case 300..<400:
+                        completion(.unowned(error: "Se quiere redireccionar al usuario a una nueva url"))
+                        
+                    case 400..<500:
+                        completion(.failed(error: .clientError))
+                        
+                    case 500..<600:
+                        completion(.failed(error: .serverError))
+                        
+                    default:
+                        completion(.unowned(error: "Codigo desconocido \(httpResponse.statusCode)"))
+                    }
+                    
+                }
             }
             
         }
