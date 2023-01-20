@@ -75,6 +75,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D354FEA1297A528E00120A57 /* CellView */ = {
+			isa = PBXGroup;
+			children = (
+				D3CA8EE029766A5B005BBA67 /* CharacterCollectionViewCell.swift */,
+			);
+			path = CellView;
+			sourceTree = "<group>";
+		};
 		D38602DD2975F2A700B4CA5C /* RickAndMortyAPITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -167,8 +175,8 @@
 		D3CA8EDB29766350005BBA67 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D354FEA1297A528E00120A57 /* CellView */,
 				D3CA8EDE29766381005BBA67 /* CharactersViewController.swift */,
-				D3CA8EE029766A5B005BBA67 /* CharacterCollectionViewCell.swift */,
 				D3741F91297901AD00217E01 /* CharactersView.swift */,
 			);
 			path = View;

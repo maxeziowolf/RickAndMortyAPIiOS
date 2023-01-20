@@ -11,6 +11,24 @@ import Foundation
 struct ResponseAPI: Codable {
     let info: Info?
     let results: [Character]?
+    
+    public static func getCharacters(nextPage: String?, completion: @escaping (_: ResponseAPI?, _: String?) -> Void){
+        
+        let url = nextPage ?? RickAndMortyAPIConstans.getCharacterUrl()
+        
+        ServiceCoordinator.sendRequest(url: url) { (response: ServiceStatus<ResponseAPI>) in
+            switch response {
+            case .success(let data):
+                completion(data, nil)
+            case .failed(let error):
+                completion(nil, error.rawValue)
+            case .unowned(let error):
+                completion(nil, error)
+            }
+        }
+        
+    }
+    
 }
 
 // MARK: - Info
@@ -37,4 +55,6 @@ struct Location: Codable {
     let name: String?
     let url: String?
 }
+
+
 

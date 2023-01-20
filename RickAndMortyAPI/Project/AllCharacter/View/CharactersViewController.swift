@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Combine
 
 class CharactersViewController: UIViewController {
     
     var characterView: CharactersView?
     var characterViewmodel = CharacterViewModel()
+    var anyCancellable: [AnyCancellable] = []
     
     override func loadView() {
         characterView = CharactersView()
@@ -19,6 +21,16 @@ class CharactersViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupViewConfiguration()
+        
+        subscriptions()
+        
+        characterViewmodel.getCharacters()
+        
+    }
+    
+    private func setupViewConfiguration(){
         
         self.navigationItem.title = "Characters"
         
@@ -30,17 +42,16 @@ class CharactersViewController: UIViewController {
         
         characterView?.setupCollectionviewProtocols(dataSource: self, delegate: self)
         
-        characterViewmodel.refreshResults = { [weak self] () in
-            self?.characterView?.reloadData()
-        }
+    }
+    
+    private func subscriptions(){
         
-        characterViewmodel.refreshCounts = { [weak self] (characterCount,allCount) in
-            self?.characterView?.setupCharacterCount(characterCount: characterCount, allCount: allCount)
-        }
+        characterViewmodel.$results.sink{ [weak self] _ in self?.characterView?.reloadData()}.store(in: &anyCancellable)
         
-        characterViewmodel.getCharacters()
+        characterViewmodel.$allCount.sink{ [weak self] allCount in self?.characterView?.setupCharacterCount(characterCount: self?.characterViewmodel.results.count ?? 826, allCount: allCount)}.store(in: &anyCancellable)
         
     }
+    
 }
 
 extension CharactersViewController: UICollectionViewDataSource{
