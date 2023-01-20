@@ -9,80 +9,39 @@ import UIKit
 
 class CharactersViewController: UIViewController {
     
-    private let flowLayoutCollectionView: UICollectionViewFlowLayout = {
-        let layaout = UICollectionViewFlowLayout()
-        layaout.scrollDirection = .vertical
-        layaout.sectionInset = .init(top: 20, left: 20, bottom: 20, right: 20)
-        layaout.minimumInteritemSpacing = 10
-        layaout.minimumLineSpacing = 10
-        return layaout
-    }()
-    
-    var results: [Result] = []
-    var nextPage: String?
 
-    private let characterCollectionview: UICollectionView = {
-        let collectionview = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionview.register(CharacterCollectionViewCell.self, forCellWithReuseIdentifier: CharacterCollectionViewCell.identifier)
-        collectionview.translatesAutoresizingMaskIntoConstraints = false
-        collectionview.backgroundColor = .clear
-        return collectionview
-    }()
+    
+    var results: [Character] = []
+    var nextPage: String?
+    var characterView: CharactersView?
+    
+    override func loadView() {
+        characterView = CharactersView()
+        view = characterView
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .black
-        [characterCollectionview].forEach(view.addSubview)
-        
-        
-        self.navigationController?.navigationBar.isHidden = false
-        self.navigationController?.navigationBar.isTranslucent = false
-//        self.navigationController?.navigationBar.barTintColor = UIColor.green
-//        self.navigationController?.navigationBar.backgroundColor = UIColor.green
-//        self.tabBarController?.tabBar.barTintColor = UIColor.green
-//        self.tabBarController?.tabBar.tintColor = UIColor.green
-        
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
-        
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.green]
-        self.navigationController?.navigationBar.tintColor = UIColor.green
-        
-        let backButton = UIBarButtonItem()
-        backButton.title = ""
-        
-        self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
-
-        
         self.navigationItem.title = "Characters"
         
-        flowLayoutCollectionView.itemSize = .init(width: (view.frame.width - 50 )/2, height: view.frame.width * 19/40)
+        if let navigationController = navigationController{
+            characterView?.setupNavigationbarConfig(navigationController: navigationController)
+        }
         
-        characterCollectionview.collectionViewLayout = flowLayoutCollectionView
+        characterView?.setupFlowLayaotConfig(width: UIScreen.main.bounds.width)
         
-       
-        
+        characterView?.setupCollectionviewProtocols(dataSource: self, delegate: self)
 
-        NSLayoutConstraint.activate([
-            characterCollectionview.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
-            characterCollectionview.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor),
-            characterCollectionview.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            characterCollectionview.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-        ])
-
-        characterCollectionview.dataSource = self
-        characterCollectionview.delegate = self
-        
         ServiceCoordinator.sendRequest(url: "https://rickandmortyapi.com/api/character") { (response: ServiceStatus<ResponseAPI>) in
             switch response {
             case .success(let data):
                 if let info = data.results{
                     self.results = info
                     self.nextPage = data.info?.next
+                    self.characterView?.setupCharacterCount(characterCount: self.results.count, allCount: data.info?.count ?? 825)
+                    self.characterView?.reloadData()
                 }
-                self.characterCollectionview.reloadData()
             case .failed(let error):
                 print(error.rawValue)
             case .unowned(let error):
@@ -113,8 +72,9 @@ extension CharactersViewController: UICollectionViewDataSource{
                         if let info = data.results{
                             self.results.append(contentsOf: info)
                             self.nextPage = data.info?.next
+                            self.characterView?.setupCharacterCount(characterCount: self.results.count, allCount: data.info?.count ?? 825)
+                            self.characterView?.reloadData()
                         }
-                        self.characterCollectionview.reloadData()
                     case .failed(let error):
                         print(error.rawValue)
                     case .unowned(let error):

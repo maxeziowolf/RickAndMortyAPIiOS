@@ -125,7 +125,7 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         fatalError("")
     }
     
-    func setupInfo(info: Result){
+    func setupInfo(info: Character){
         
         characterNameLabel.text = info.name ?? ""
         characterStateLabel.text = info.status ?? ""

@@ -7,10 +7,10 @@
 
 import Foundation
 
-// MARK: - Character
+// MARK: - ResponseAPI
 struct ResponseAPI: Codable {
     let info: Info?
-    let results: [Result]?
+    let results: [Character]?
 }
 
 // MARK: - Info
@@ -20,8 +20,8 @@ struct Info: Codable {
     let prev: String?
 }
 
-// MARK: - Result
-struct Result: Codable {
+// MARK: - Character
+struct Character: Codable {
     let id: Int?
     let name, status, species, type: String?
     let gender: String?
