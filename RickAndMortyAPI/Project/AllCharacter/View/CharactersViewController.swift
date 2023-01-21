@@ -30,6 +30,11 @@ class CharactersViewController: UIViewController {
         
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        characterViewmodel.clearCache()
+    }
+    
     private func setupViewConfiguration(){
         
         self.navigationItem.title = "Characters"
@@ -63,7 +68,17 @@ extension CharactersViewController: UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterCollectionViewCell.identifier, for: indexPath) as! CharacterCollectionViewCell
         
-        cell.setupInfo(info: characterViewmodel.results[indexPath.row])
+        let character = characterViewmodel.results[indexPath.row]
+        
+        cell.setupInfo(info: character, itemNumber: indexPath.item)
+        
+        if let url = character.image{
+         
+            characterViewmodel.getImageCharacter(itemNumber:  NSNumber(value: indexPath.item), url:  url ) { image,itemNumber,animated in
+                cell.setupImage(image: image, itemNumber: itemNumber,animated: animated)
+            }
+            
+        }
         
         if indexPath.row == (characterViewmodel.results.count - 1){
             characterViewmodel.getCharacters()

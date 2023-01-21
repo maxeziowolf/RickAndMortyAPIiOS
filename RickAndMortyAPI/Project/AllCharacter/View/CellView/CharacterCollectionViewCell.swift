@@ -11,6 +11,8 @@ class CharacterCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "CharacterCollectionViewCell"
     
+    var itemNumber: Int = 0
+    
     private let characterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -34,8 +36,9 @@ class CharacterCollectionViewCell: UICollectionViewCell {
     } ()
     
     private let characterNameLabel: UILabel = {
-       let label = UILabel()
+        let label = UILabel()
         label.text = "Nombre del personaje"
+        label.textColor = .red
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 15, weight: .bold)
         label.adjustsFontSizeToFitWidth = true
@@ -49,6 +52,7 @@ class CharacterCollectionViewCell: UICollectionViewCell {
        let label = UILabel()
         label.text = "Estado del personaje"
         label.font = .systemFont(ofSize: 12)
+        label.textColor = .red
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -125,12 +129,12 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         fatalError("")
     }
     
-    func setupInfo(info: Character){
+    func setupInfo(info: Character, itemNumber: Int){
         
         characterNameLabel.text = info.name ?? ""
         characterStateLabel.text = info.status ?? ""
         characterImageView.image = UIImage(named: "image.rick.default.image")
-        characterImageView.downloadedFrom(link: info.image ?? "")
+        self.itemNumber = itemNumber
         
         switch info.status {
         case "Alive":
@@ -143,52 +147,20 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         
     }
     
+    func setupImage(image: UIImage?, itemNumber: Int, animated: Bool){
+
+        if self.itemNumber == itemNumber{
+            characterImageView.contentMode = .scaleAspectFill
+            if let image = image{
+                characterImageView.image = image
+            }
+            if animated{
+                characterImageView.downloadAnimation()
+            }
+        }
+    }
+    
     
 }
 
-extension UIImageView {
-    
-    func downloadedFrom(url: URL, contentMode mode: UIView.ContentMode = .scaleAspectFit, animated: Bool = false) {
-        contentMode = mode
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard
-                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
-                let data = data, error == nil,
-                let image = UIImage(data: data)
-                else { return }
-            DispatchQueue.main.async() {
-                
-                if animated {
-                    
-                    UIView.animate(withDuration: 0.1, delay: 0.1, options: .curveLinear, animations: {
-                        
-                        self.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-                                
-                    }) { (success) in
-                        UIView.animate(withDuration: 0.1, delay: 0.0, options: .curveLinear, animations: {
-                            
-                            self.image = image
-                            self.transform = .identity
-                            
-                        }, completion: nil)
-                    }
-                    
-                }else{
-                    
-                    self.image = image
-                    
-                }
-                
-            }
-            }.resume()
-    }
-    
-    func downloadedFrom(link: String, contentMode mode: UIView.ContentMode = .scaleAspectFit, animated: Bool = false) {
-        
-        guard let url = URL(string: link) else { return }
-        
-        downloadedFrom(url: url, contentMode: mode, animated: animated)
-    }
-    
-}
+

@@ -5,16 +5,20 @@
 //  Created by Maximiliano Ovando Ramírez on 16/01/23.
 //
 
-import Foundation
+import UIKit
 
 // MARK: - ResponseAPI
 struct ResponseAPI: Codable {
     let info: Info?
     let results: [Character]?
     
-    public static func getCharacters(nextPage: String?, completion: @escaping (_: ResponseAPI?, _: String?) -> Void){
+
+    
+    public static func getCharacters(nextPage: String?, firstRequest: Bool, completion: @escaping (ResponseAPI?, String?) -> Void){
         
-        let url = nextPage ?? RickAndMortyAPIConstans.getCharacterUrl()
+        guard let url = firstRequest ? RickAndMortyAPIConstans.getCharacterUrl() : nextPage else {
+            return
+        }
         
         ServiceCoordinator.sendRequest(url: url) { (response: ServiceStatus<ResponseAPI>) in
             switch response {
@@ -48,6 +52,10 @@ struct Character: Codable {
     let episode: [String]?
     let url: String?
     let created: String?
+    
+    public static func getImageCharacter(url: String, completion: @escaping (UIImage?) -> Void){
+        ServiceCoordinator.downloadedFrom(link: url, completion: completion)
+    }
 }
 
 // MARK: - Location

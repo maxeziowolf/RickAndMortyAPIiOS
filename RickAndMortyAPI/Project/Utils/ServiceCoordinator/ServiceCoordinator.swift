@@ -122,5 +122,38 @@ public class ServiceCoordinator {
         }
     }
     
+    static func downloadedFrom(link: String, completion: @escaping (UIImage?) -> Void) {
+        
+        guard let url = getURL(url: link, parameters: nil) else { return }
+        
+        downloadedFrom(url: url, completion: completion)
+    }
+    
+    static func downloadedFrom(url: URL, completion: @escaping (UIImage?) -> Void) {
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            
+            DispatchQueue.main.async() {
+                
+                if let _ = error{
+                    completion(nil)
+                    return
+                }
+                
+                guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                      let data = data, let image = UIImage(data: data) else {
+                    completion(nil)
+                    return
+                }
+                
+                completion(image)
+                
+            }
+        }.resume()
+        
+    }
+    
 }
+
+
 
