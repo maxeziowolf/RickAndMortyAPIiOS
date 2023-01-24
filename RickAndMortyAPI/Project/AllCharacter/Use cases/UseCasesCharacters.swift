@@ -76,7 +76,7 @@ final class UseCasesCharacters {
         
     }
     
-    func clearCache(){
+    public func clearCache(){
         cache.removeAllObjects()
     }
     

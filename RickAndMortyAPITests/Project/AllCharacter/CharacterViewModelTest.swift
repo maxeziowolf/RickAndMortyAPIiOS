@@ -12,7 +12,6 @@ import Combine
 final class CharacterViewModelTest: XCTestCase {
     
     private var characterViewModel: CharacterViewModel? = nil
-    private var anyCancelable: [AnyCancellable] = []
     private let exampleURLImage = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
     
     override func setUp() {
