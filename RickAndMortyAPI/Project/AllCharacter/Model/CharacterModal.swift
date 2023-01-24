@@ -11,28 +11,6 @@ import UIKit
 struct ResponseAPI: Codable {
     let info: Info?
     let results: [Character]?
-    
-
-    
-    public static func getCharacters(nextPage: String?, firstRequest: Bool, completion: @escaping (ResponseAPI?, String?) -> Void){
-        
-        guard let url = firstRequest ? RickAndMortyAPIConstans.getCharacterUrl() : nextPage else {
-            return
-        }
-        
-        ServiceCoordinator.sendRequest(url: url) { (response: ServiceStatus<ResponseAPI>) in
-            switch response {
-            case .success(let data):
-                completion(data, nil)
-            case .failed(let error):
-                completion(nil, error.rawValue)
-            case .unowned(let error):
-                completion(nil, error)
-            }
-        }
-        
-    }
-    
 }
 
 // MARK: - Info
@@ -52,10 +30,6 @@ struct Character: Codable {
     let episode: [String]?
     let url: String?
     let created: String?
-    
-    public static func getImageCharacter(url: String, completion: @escaping (UIImage?) -> Void){
-        ServiceCoordinator.downloadedFrom(link: url, completion: completion)
-    }
 }
 
 // MARK: - Location

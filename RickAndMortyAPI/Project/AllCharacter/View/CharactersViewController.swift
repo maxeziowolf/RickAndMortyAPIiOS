@@ -32,6 +32,7 @@ class CharactersViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        anyCancellable.removeAll()
         characterViewmodel.clearCache()
     }
     
@@ -62,23 +63,31 @@ class CharactersViewController: UIViewController {
 extension CharactersViewController: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        characterViewmodel.results.count
+        characterViewmodel.allCount > characterViewmodel.results.count ? characterViewmodel.results.count + 4 : characterViewmodel.results.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterCollectionViewCell.identifier, for: indexPath) as! CharacterCollectionViewCell
         
-        let character = characterViewmodel.results[indexPath.row]
-        
-        cell.setupInfo(info: character, itemNumber: indexPath.item)
-        
-        if let url = character.image{
-         
-            characterViewmodel.getImageCharacter(itemNumber:  NSNumber(value: indexPath.item), url:  url ) { image,itemNumber,animated in
-                cell.setupImage(image: image, itemNumber: itemNumber,animated: animated)
+        if indexPath.row < characterViewmodel.results.count {
+            
+            let character = characterViewmodel.results[indexPath.row]
+            
+            cell.setupInfo(info: character, itemNumber: indexPath.item)
+            
+            if let url = character.image{
+             
+                characterViewmodel.getImageCharacter(itemNumber:  NSNumber(value: indexPath.item), url:  url ) { image,itemNumber in
+                    cell.setupImage(image: image, itemNumber: itemNumber)
+                }
+                
             }
             
+        }else{
+            cell.setupLoadingCard()
         }
+        
+
         
         if indexPath.row == (characterViewmodel.results.count - 1){
             characterViewmodel.getCharacters()

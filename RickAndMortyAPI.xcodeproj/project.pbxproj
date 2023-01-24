@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D31D5D47297B76E200F7FCB0 /* Image+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31D5D46297B76E200F7FCB0 /* Image+Extensions.swift */; };
+		D31D5D4A297B80CF00F7FCB0 /* UseCasesCharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31D5D49297B80CF00F7FCB0 /* UseCasesCharacters.swift */; };
 		D354FE9E297A443600120A57 /* CharacterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D354FE9D297A443600120A57 /* CharacterViewModel.swift */; };
 		D354FEA0297A461500120A57 /* RickAndMortyAPIConstans.swift in Sources */ = {isa = PBXBuildFile; fileRef = D354FE9F297A461500120A57 /* RickAndMortyAPIConstans.swift */; };
 		D3741F92297901AD00217E01 /* CharactersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3741F91297901AD00217E01 /* CharactersView.swift */; };
@@ -36,7 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D31D5D46297B76E200F7FCB0 /* Image+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Extensions.swift"; sourceTree = "<group>"; };
+		D31D5D49297B80CF00F7FCB0 /* UseCasesCharacters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCasesCharacters.swift; sourceTree = "<group>"; };
 		D354FE9D297A443600120A57 /* CharacterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterViewModel.swift; sourceTree = "<group>"; };
 		D354FE9F297A461500120A57 /* RickAndMortyAPIConstans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RickAndMortyAPIConstans.swift; sourceTree = "<group>"; };
 		D3741F91297901AD00217E01 /* CharactersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersView.swift; sourceTree = "<group>"; };
@@ -75,6 +75,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D31D5D48297B809200F7FCB0 /* Use cases */ = {
+			isa = PBXGroup;
+			children = (
+				D31D5D49297B80CF00F7FCB0 /* UseCasesCharacters.swift */,
+			);
+			path = "Use cases";
+			sourceTree = "<group>";
+		};
 		D354FEA1297A528E00120A57 /* CellView */ = {
 			isa = PBXGroup;
 			children = (
@@ -166,6 +174,7 @@
 			children = (
 				D3CA8EDB29766350005BBA67 /* View */,
 				D3CA8EDC2976635B005BBA67 /* ViewModel */,
+				D31D5D48297B809200F7FCB0 /* Use cases */,
 				D3CA8EDD29766365005BBA67 /* Model */,
 			);
 			path = AllCharacter;
@@ -254,7 +263,6 @@
 			children = (
 				D3CA8ED229763D9C005BBA67 /* ServiceCoordinator */,
 				D354FE9F297A461500120A57 /* RickAndMortyAPIConstans.swift */,
-				D31D5D46297B76E200F7FCB0 /* Image+Extensions.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -382,7 +390,7 @@
 				D3AD01F52973900100659748 /* AppDelegate.swift in Sources */,
 				D3CA8EE129766A5B005BBA67 /* CharacterCollectionViewCell.swift in Sources */,
 				D3CA8ED829766054005BBA67 /* CharacterModal.swift in Sources */,
-				D31D5D47297B76E200F7FCB0 /* Image+Extensions.swift in Sources */,
+				D31D5D4A297B80CF00F7FCB0 /* UseCasesCharacters.swift in Sources */,
 				D3AD01F72973900100659748 /* SceneDelegate.swift in Sources */,
 				D354FE9E297A443600120A57 /* CharacterViewModel.swift in Sources */,
 				D3741F92297901AD00217E01 /* CharactersView.swift in Sources */,

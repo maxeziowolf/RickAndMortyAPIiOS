@@ -9,7 +9,7 @@ import UIKit
 
 typealias Response<T> = (ServiceStatus<T>)->Void
 
-public class ServiceCoordinator {
+public final class ServiceCoordinator {
     
     static func sendRequest<T: Codable>(url urlString: String, parameters params: [String: Any]? = nil, httpMethod: HTTPType = .get , headerFields: [String:String]? = nil, body: [String: Any]? = nil, completion: @escaping Response<T>){
         
@@ -34,6 +34,7 @@ public class ServiceCoordinator {
         let task = URLSession.shared.dataTask(with: request){ data, response, error in
             
             DispatchQueue.main.async {
+                
                 if let error = error{
                     completion(.unowned(error: error.localizedDescription))
                     return
@@ -50,7 +51,9 @@ public class ServiceCoordinator {
                       
                         if let data = data {
                             
-                            if let dataD: T = decodingRequest(data: data){
+                            if let dataD: T = data as? T{
+                                completion(.success(data: dataD))
+                            } else if let dataD: T = decodingRequest(data: data){
                                 completion(.success(data: dataD))
                             }else{
                                 completion(.failed(error: .codingError))
@@ -120,37 +123,6 @@ public class ServiceCoordinator {
         }catch{
             return nil
         }
-    }
-    
-    static func downloadedFrom(link: String, completion: @escaping (UIImage?) -> Void) {
-        
-        guard let url = getURL(url: link, parameters: nil) else { return }
-        
-        downloadedFrom(url: url, completion: completion)
-    }
-    
-    static func downloadedFrom(url: URL, completion: @escaping (UIImage?) -> Void) {
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            
-            DispatchQueue.main.async() {
-                
-                if let _ = error{
-                    completion(nil)
-                    return
-                }
-                
-                guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-                      let data = data, let image = UIImage(data: data) else {
-                    completion(nil)
-                    return
-                }
-                
-                completion(image)
-                
-            }
-        }.resume()
-        
     }
     
 }

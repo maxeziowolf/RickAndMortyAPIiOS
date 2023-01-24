@@ -38,7 +38,7 @@ class CharacterCollectionViewCell: UICollectionViewCell {
     private let characterNameLabel: UILabel = {
         let label = UILabel()
         label.text = "Nombre del personaje"
-        label.textColor = .red
+        label.textColor = .black
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 15, weight: .bold)
         label.adjustsFontSizeToFitWidth = true
@@ -52,7 +52,7 @@ class CharacterCollectionViewCell: UICollectionViewCell {
        let label = UILabel()
         label.text = "Estado del personaje"
         label.font = .systemFont(ofSize: 12)
-        label.textColor = .red
+        label.textColor = .black
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -147,17 +147,24 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func setupImage(image: UIImage?, itemNumber: Int, animated: Bool){
+    func setupLoadingCard(){
+        
+        characterNameLabel.text = "Loading..."
+        characterStateLabel.text = ""
+        characterImageView.image = UIImage(named: "image.rick.default.image")
+        view.backgroundColor = .white
+        
+    }
+    
+    func setupImage(image: UIImage?, itemNumber: Int){
 
         if self.itemNumber == itemNumber{
             characterImageView.contentMode = .scaleAspectFill
             if let image = image{
                 characterImageView.image = image
             }
-            if animated{
-                characterImageView.downloadAnimation()
-            }
         }
+        
     }
     
     
