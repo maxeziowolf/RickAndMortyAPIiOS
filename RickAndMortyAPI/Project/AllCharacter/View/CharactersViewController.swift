@@ -63,7 +63,7 @@ class CharactersViewController: UIViewController {
 extension CharactersViewController: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        characterViewmodel.allCount > characterViewmodel.results.count ? characterViewmodel.results.count + 4 : characterViewmodel.results.count
+        characterViewmodel.allCount > characterViewmodel.results.count ? characterViewmodel.results.count + 8 : characterViewmodel.results.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

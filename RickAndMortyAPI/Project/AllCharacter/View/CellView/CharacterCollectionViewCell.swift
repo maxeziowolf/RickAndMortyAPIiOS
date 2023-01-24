@@ -65,36 +65,35 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        contentView.addSubview(characterImageView)
-        contentView.addSubview(cardCharacterView)
-        
+    private let infoStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         stackView.alignment = .center
         stackView.spacing = 5
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let stackView2 = UIStackView()
-        stackView2.axis = .horizontal
-        stackView2.distribution = .fillProportionally
-        stackView2.alignment = .center
-        stackView2.spacing = 5
-        stackView2.translatesAutoresizingMaskIntoConstraints = false
-        
-
-        
-        cardCharacterView.addSubview(stackView)
-        cardCharacterView.addSubview(stackView2)
-        
-        stackView.addArrangedSubview(characterNameLabel)
-        stackView.addArrangedSubview(stackView2)
-        
-        
-        stackView2.addArrangedSubview(view)
-        stackView2.addArrangedSubview(characterStateLabel)
+        return stackView
+    }()
+    
+    private let statusStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillProportionally
+        stackView.alignment = .center
+        stackView.spacing = 5
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.addSubview(characterImageView)
+        contentView.addSubview(cardCharacterView)
+        cardCharacterView.addSubview(infoStackView)
+        infoStackView.addArrangedSubview(characterNameLabel)
+        infoStackView.addArrangedSubview(statusStackView)
+        statusStackView .addArrangedSubview(view)
+        statusStackView .addArrangedSubview(characterStateLabel)
 
         
         
@@ -110,10 +109,10 @@ class CharacterCollectionViewCell: UICollectionViewCell {
             cardCharacterView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             cardCharacterView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            stackView.topAnchor.constraint(equalTo: cardCharacterView.topAnchor, constant: 5),
-            stackView.leadingAnchor.constraint(equalTo: cardCharacterView.leadingAnchor, constant: 5),
-            stackView.trailingAnchor.constraint(equalTo: cardCharacterView.trailingAnchor, constant: -5),
-            stackView.bottomAnchor.constraint(equalTo: cardCharacterView.bottomAnchor, constant: -5),
+            infoStackView.topAnchor.constraint(equalTo: cardCharacterView.topAnchor, constant: 5),
+            infoStackView.leadingAnchor.constraint(equalTo: cardCharacterView.leadingAnchor, constant: 5),
+            infoStackView.trailingAnchor.constraint(equalTo: cardCharacterView.trailingAnchor, constant: -5),
+            infoStackView.bottomAnchor.constraint(equalTo: cardCharacterView.bottomAnchor, constant: -5),
             view.heightAnchor.constraint(equalToConstant: 10),
             view.widthAnchor.constraint(equalToConstant: 10)
             
@@ -151,7 +150,7 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         
         characterNameLabel.text = "Loading..."
         characterStateLabel.text = ""
-        characterImageView.image = UIImage(named: "image.rick.default.image")
+        characterImageView.image = UIImage(named: "image.loader.portal")
         view.backgroundColor = .white
         
     }
