@@ -13,7 +13,6 @@ class CharacterViewModel {
     private var useCasesCharacters = UseCasesCharacters()
     @Published var results: [Character] = []
     @Published var allCount: Int = 826
-    @Published var isLoading: Bool = false
     
     
     func getCharacters(){
