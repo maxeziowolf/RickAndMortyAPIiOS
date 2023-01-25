@@ -13,7 +13,7 @@ Puedes probar este proyecto, lo puedes clonar, hacer fork o descargar en tu ento
 <h2>Pantalla inicial/HOME</h2>
 
 <div align="center" >
-  <img src="/screenshots/ImagenPrincipal.png" alt="ImagenPrincipal" width="400" height="800" align="center" >
+  <img src="/screenshots/ImagenPrincpal.png" alt="ImagenPrincipal" width="400" height="800" align="center" >
 </div>
 
 </br>
