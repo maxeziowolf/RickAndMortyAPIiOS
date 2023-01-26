@@ -29,7 +29,7 @@ final class UseCasesCharacters {
                 return
             }
             
-            ServiceCoordinator.sendRequest(url: url) { [weak self] (response: ServiceStatus<ResponseAPI>) in
+            ServiceCoordinator.sendRequest(url: url, cachePolicy: .useProtocolCachePolicy) { [weak self] (response: ServiceStatus<ResponseAPI>) in
                 
                 self?.firstRequest = false
                 

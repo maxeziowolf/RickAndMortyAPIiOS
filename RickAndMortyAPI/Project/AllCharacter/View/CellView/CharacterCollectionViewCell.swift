@@ -13,10 +13,20 @@ class CharacterCollectionViewCell: UICollectionViewCell {
     
     var itemNumber: Int = 0
     
+    var loadingAnimated = false
+    
     private let characterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.image = UIImage(named: "image.rick.default.image")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    private let loadingImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(named: "image.loader.portal")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -88,6 +98,7 @@ class CharacterCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(characterImageView)
+        contentView.addSubview(loadingImageView)
         contentView.addSubview(cardCharacterView)
         cardCharacterView.addSubview(infoStackView)
         infoStackView.addArrangedSubview(characterNameLabel)
@@ -103,6 +114,11 @@ class CharacterCollectionViewCell: UICollectionViewCell {
             characterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             characterImageView.heightAnchor.constraint(equalToConstant: contentView.frame.width * 5/6),
             characterImageView.widthAnchor.constraint(equalToConstant: contentView.frame.width * 5/6),
+            
+            loadingImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            loadingImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            loadingImageView.heightAnchor.constraint(equalToConstant: contentView.frame.width * 5/6),
+            loadingImageView.widthAnchor.constraint(equalToConstant: contentView.frame.width * 5/6),
             
             cardCharacterView.topAnchor.constraint(equalTo: characterImageView.bottomAnchor, constant: -30),
             cardCharacterView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -122,6 +138,10 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         characterImageView.layer.masksToBounds = false
         characterImageView.layer.cornerRadius = (contentView.frame.width * 5/6)/2
         characterImageView.clipsToBounds = true
+        
+        loadingImageView.layer.masksToBounds = false
+        loadingImageView.layer.cornerRadius = (contentView.frame.width * 5/6)/2
+        loadingImageView.clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {
@@ -134,6 +154,9 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         characterStateLabel.text = info.status ?? ""
         characterImageView.image = UIImage(named: "image.rick.default.image")
         self.itemNumber = itemNumber
+        characterImageView.isHidden = false
+        loadingImageView.isHidden = true
+        loadingAnimated = false
         
         switch info.status {
         case "Alive":
@@ -150,7 +173,10 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         
         characterNameLabel.text = "Loading..."
         characterStateLabel.text = ""
-        characterImageView.image = UIImage(named: "image.loader.portal")
+        characterImageView.isHidden = true
+        loadingImageView.isHidden = false
+        loadingAnimated = true
+        loadingAnimation()
         view.backgroundColor = .white
         
     }
@@ -164,6 +190,21 @@ class CharacterCollectionViewCell: UICollectionViewCell {
             }
         }
         
+    }
+    
+    func loadingAnimation(){
+        
+        if loadingAnimated {
+            UIView.animate(withDuration: 1, delay: 0.0, options: [.curveLinear], animations: {[weak self] in
+                self?.loadingImageView.transform = self?.loadingImageView.transform.rotated(by: .pi) ?? .identity
+            }) { _ in
+                UIView.animate(withDuration: 1, delay: 0.0, options: [.curveLinear], animations: { [weak self] in
+                    self?.loadingImageView.transform = self?.loadingImageView.transform.rotated(by: .pi) ?? .identity
+                }) { [weak self] _ in
+                    self?.loadingAnimation()
+                }
+            }
+        }
     }
     
     
