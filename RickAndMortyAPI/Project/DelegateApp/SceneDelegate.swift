@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         self.window = window
         
-        let mainView = HomeViewController(nibName: nil, bundle: nil)
+        let mainView = HomeTabBarViewController(nibName: nil, bundle: nil)
         let navigationController = UINavigationController(rootViewController: mainView)
         
         navigationController.navigationBar.isHidden = true

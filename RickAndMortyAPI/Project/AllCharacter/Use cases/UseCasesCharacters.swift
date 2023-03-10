@@ -34,7 +34,9 @@ final class UseCasesCharacters {
                 self?.firstRequest = false
                 
                 switch response {
+                    
                 case .success(let data):
+                    print(data)
                     self?.nextPage = data.info?.next
                     completion(data, nil)
                 case .failed(let error):
