@@ -7,12 +7,17 @@
 
 import UIKit
 import Combine
+import SwiftUI
 
 class CharactersViewController: UIViewController {
+    
+    //MARK: Variables
     
     var characterView: CharactersView?
     var characterViewmodel = CharacterViewModel()
     var anyCancellable: [AnyCancellable] = []
+    
+    //MARK: Lifecycle
     
     override func loadView() {
         characterView = CharactersView()
@@ -30,19 +35,22 @@ class CharactersViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        subscriptions()
+        
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         anyCancellable.removeAll()
         characterViewmodel.clearCache()
     }
     
+    //MARK: Functions
+    
     private func setupViewConfiguration(){
-        
-        self.navigationItem.title = "Characters"
-        
-        if let navigationController = navigationController{
-            characterView?.setupNavigationbarConfig(navigationController: navigationController)
-        }
         
         characterView?.setupFlowLayaotConfig(width: UIScreen.main.bounds.width)
         
@@ -59,6 +67,8 @@ class CharactersViewController: UIViewController {
     }
     
 }
+
+//MARK: UICollectionViewDataSource
 
 extension CharactersViewController: UICollectionViewDataSource{
     
@@ -99,9 +109,24 @@ extension CharactersViewController: UICollectionViewDataSource{
     
 }
 
+//MARK: UICollectionViewDelegate
 
 extension CharactersViewController: UICollectionViewDelegate{
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let vc = HomeViewController()
+//        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
 }
 
+//MARK: Previews
+
+struct CharactersViewController_Previews: PreviewProvider {
+    static var previews: some View{
+        ViewControllerPreview{
+            CharactersViewController()
+        }
+    }
+}
 
