@@ -11,7 +11,7 @@ typealias Response<T> = (ServiceStatus<T>)->Void
 
 public final class ServiceCoordinator {
     
-    static func sendRequest<T: Codable>(url urlString: String, parameters params: [String: Any]? = nil, httpMethod: HTTPType = .get , headerFields: [String:String]? = nil, body: [String: Any]? = nil, completion: @escaping Response<T>){
+    static func sendRequest<T: Codable>(url urlString: String, parameters params: [String: Any]? = nil, httpMethod: HTTPType = .get , headerFields: [String:String]? = nil, body: [String: Any]? = nil, cachePolicy: URLRequest.CachePolicy = .reloadIgnoringLocalAndRemoteCacheData, completion: @escaping Response<T>){
         
         guard let url = getURL(url: urlString, parameters: params) else {
             completion(.failed(error: .urlInvalid))
@@ -21,6 +21,7 @@ public final class ServiceCoordinator {
         var request = URLRequest(url: url)
         
         request.httpMethod = httpMethod.rawValue
+        request.cachePolicy = cachePolicy
         
         if let headerFields = headerFields {
             request.allHTTPHeaderFields = headerFields

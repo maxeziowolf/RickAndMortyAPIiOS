@@ -16,8 +16,10 @@ class CharacterCollectionViewCell: UICollectionViewCell {
     //MARK: Internal variables
     var itemNumber: Int = 0
     var info: Character?
+    var loadingAnimated = false
     
     //MARK: UIComponets
+    
     private let characterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -26,6 +28,14 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         imageView.layer.masksToBounds = false
         imageView.layer.cornerRadius = 25
         imageView.clipsToBounds = true
+        return imageView
+    }()
+    
+    private let loadingImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(named: "image.loader.portal")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -94,7 +104,7 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         
         //Se agregan las vistas
-        [characterImageView,cardCharacterView].forEach(contentView.addSubview)
+        [characterImageView,loadingImageView ,cardCharacterView].forEach(contentView.addSubview)
         cardCharacterView.addSubview(infoStackView)
         [characterNameLabel, statusStackView].forEach(infoStackView.addArrangedSubview)
         [viewStatus,characterStateLabel].forEach(statusStackView.addArrangedSubview)
@@ -107,7 +117,12 @@ class CharacterCollectionViewCell: UICollectionViewCell {
             characterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             characterImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             characterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-
+            
+            loadingImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
+            loadingImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
+            loadingImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
+            loadingImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
+            
             cardCharacterView.topAnchor.constraint(equalTo: characterImageView.bottomAnchor, constant: -70),
             cardCharacterView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cardCharacterView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -135,6 +150,10 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         characterStateLabel.text = info.status ?? ""
         characterImageView.image = UIImage(named: "image.rick.default.image")
         self.itemNumber = itemNumber
+        characterImageView.isHidden = false
+        loadingImageView.isHidden = true
+        viewStatus.isHidden = false
+        loadingAnimated = false
         
         switch info.status {
         case "Alive":
@@ -151,8 +170,11 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         
         characterNameLabel.text = "Loading..."
         characterStateLabel.text = ""
-        characterImageView.image = UIImage(named: "image.loader.portal")
-        viewStatus.backgroundColor = .white
+        characterImageView.isHidden = true
+        loadingImageView.isHidden = false
+        viewStatus.isHidden = true
+        loadingAnimated = true
+        loadingAnimation()
         
     }
     
@@ -179,6 +201,22 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         
     }
     
+    func loadingAnimation(){
+        
+        if loadingAnimated {
+            UIView.animate(withDuration: 1, delay: 0.0, options: [.curveLinear], animations: {[weak self] in
+                self?.loadingImageView.transform = self?.loadingImageView.transform.rotated(by: .pi) ?? .identity
+            }) { _ in
+                UIView.animate(withDuration: 1, delay: 0.0, options: [.curveLinear], animations: { [weak self] in
+                    self?.loadingImageView.transform = self?.loadingImageView.transform.rotated(by: .pi) ?? .identity
+                }) { [weak self] _ in
+                    self?.loadingAnimation()
+                }
+            }
+        }
+    }
+    
+    
 }
 
 //MARK: Previews
@@ -194,11 +232,11 @@ struct CharacterCollectionViewCell_Previews: PreviewProvider {
         ViewPreview{
             let view = CharacterCollectionViewCell(frame: CGRect(x: 0, y: 0, width: widthSize, height: heightSize))
             let characterViewmodel = CharacterViewModel()
-            characterViewmodel.getImageCharacter(itemNumber:  0, url:  "https://rickandmortyapi.com/api/character/avatar/1.jpeg" ) { image,itemNumber in
-                view.setupImage(image: image, itemNumber: itemNumber)
-            }
-            view.setupInfo(info: character, itemNumber: 0)
-            //view.setupLoadingCard()
+//            characterViewmodel.getImageCharacter(itemNumber:  0, url:  "https://rickandmortyapi.com/api/character/avatar/1.jpeg" ) { image,itemNumber in
+//                view.setupImage(image: image, itemNumber: itemNumber)
+//            }
+            //view.setupInfo(info: character, itemNumber: 0)
+            view.setupLoadingCard()
             return view
         }
         .previewLayout(PreviewLayout.fixed(width: CGFloat(widthSize + 40), height: CGFloat(heightSize + 10)))
