@@ -6,20 +6,28 @@
 //
 
 import UIKit
+import SwiftUI
 
 class CharacterCollectionViewCell: UICollectionViewCell {
     
+    //MARK: Static variables
     static let identifier = "CharacterCollectionViewCell"
     
+    //MARK: Internal variables
     var itemNumber: Int = 0
-    
+    var info: Character?
     var loadingAnimated = false
+    
+    //MARK: UIComponets
     
     private let characterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.image = UIImage(named: "image.rick.default.image")
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.masksToBounds = false
+        imageView.layer.cornerRadius = 25
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -33,24 +41,20 @@ class CharacterCollectionViewCell: UICollectionViewCell {
     
     private let cardCharacterView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 15
-        view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor(named: "GreenRick")?.cgColor
-        view.layer.masksToBounds = false
+        let color = UIColor(red: 0, green: 0, blue: 0, alpha: 0.4)
+        view.backgroundColor = color
+        view.layer.cornerRadius = 25
+        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         view .translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        
         return view
     } ()
     
     private let characterNameLabel: UILabel = {
         let label = UILabel()
         label.text = "Nombre del personaje"
-        label.textColor = .black
-        label.textAlignment = .center
-        label.font = .systemFont(ofSize: 15, weight: .bold)
+        label.textColor = .white
+        label.textAlignment = .left
+        label.font = .systemFont(ofSize: 18, weight: .bold)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.numberOfLines = 2
@@ -62,13 +66,13 @@ class CharacterCollectionViewCell: UICollectionViewCell {
        let label = UILabel()
         label.text = "Estado del personaje"
         label.font = .systemFont(ofSize: 12)
-        label.textColor = .black
+        label.textColor = .white
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let view: UIView = {
+    private let viewStatus: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 10/2
         view.backgroundColor = .gray
@@ -78,8 +82,8 @@ class CharacterCollectionViewCell: UICollectionViewCell {
     private let infoStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.distribution = .fillEqually
-        stackView.alignment = .center
+        stackView.distribution = .fillProportionally
+        stackView.alignment = .leading
         stackView.spacing = 5
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -95,53 +99,44 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         return stackView
     }()
     
+    //MARK: Inicializacion de la celda
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(characterImageView)
-        contentView.addSubview(loadingImageView)
-        contentView.addSubview(cardCharacterView)
+        
+        //Se agregan las vistas
+        [characterImageView,loadingImageView ,cardCharacterView].forEach(contentView.addSubview)
         cardCharacterView.addSubview(infoStackView)
-        infoStackView.addArrangedSubview(characterNameLabel)
-        infoStackView.addArrangedSubview(statusStackView)
-        statusStackView .addArrangedSubview(view)
-        statusStackView .addArrangedSubview(characterStateLabel)
+        [characterNameLabel, statusStackView].forEach(infoStackView.addArrangedSubview)
+        [viewStatus,characterStateLabel].forEach(statusStackView.addArrangedSubview)
 
         
-        
+        //Se agregan los respectivos constrains
         NSLayoutConstraint.activate([
             
-            characterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            characterImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            characterImageView.heightAnchor.constraint(equalToConstant: contentView.frame.width * 5/6),
-            characterImageView.widthAnchor.constraint(equalToConstant: contentView.frame.width * 5/6),
+            characterImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            characterImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            characterImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            characterImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            loadingImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            loadingImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            loadingImageView.heightAnchor.constraint(equalToConstant: contentView.frame.width * 5/6),
-            loadingImageView.widthAnchor.constraint(equalToConstant: contentView.frame.width * 5/6),
+            loadingImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
+            loadingImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
+            loadingImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
+            loadingImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -40),
             
-            cardCharacterView.topAnchor.constraint(equalTo: characterImageView.bottomAnchor, constant: -30),
+            cardCharacterView.topAnchor.constraint(equalTo: characterImageView.bottomAnchor, constant: -70),
             cardCharacterView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cardCharacterView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             cardCharacterView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
-            infoStackView.topAnchor.constraint(equalTo: cardCharacterView.topAnchor, constant: 5),
-            infoStackView.leadingAnchor.constraint(equalTo: cardCharacterView.leadingAnchor, constant: 5),
+
+            infoStackView.topAnchor.constraint(equalTo: cardCharacterView.topAnchor, constant: 10),
+            infoStackView.leadingAnchor.constraint(equalTo: cardCharacterView.leadingAnchor, constant: 10),
             infoStackView.trailingAnchor.constraint(equalTo: cardCharacterView.trailingAnchor, constant: -5),
-            infoStackView.bottomAnchor.constraint(equalTo: cardCharacterView.bottomAnchor, constant: -5),
-            view.heightAnchor.constraint(equalToConstant: 10),
-            view.widthAnchor.constraint(equalToConstant: 10)
+            infoStackView.bottomAnchor.constraint(equalTo: cardCharacterView.bottomAnchor, constant: -10),
+            viewStatus.heightAnchor.constraint(equalToConstant: 10),
+            viewStatus.widthAnchor.constraint(equalToConstant: 10)
             
         ])
         
-        
-        characterImageView.layer.masksToBounds = false
-        characterImageView.layer.cornerRadius = (contentView.frame.width * 5/6)/2
-        characterImageView.clipsToBounds = true
-        
-        loadingImageView.layer.masksToBounds = false
-        loadingImageView.layer.cornerRadius = (contentView.frame.width * 5/6)/2
-        loadingImageView.clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {
@@ -150,21 +145,23 @@ class CharacterCollectionViewCell: UICollectionViewCell {
     
     func setupInfo(info: Character, itemNumber: Int){
         
+        self.info = info
         characterNameLabel.text = info.name ?? ""
         characterStateLabel.text = info.status ?? ""
         characterImageView.image = UIImage(named: "image.rick.default.image")
         self.itemNumber = itemNumber
         characterImageView.isHidden = false
         loadingImageView.isHidden = true
+        viewStatus.isHidden = false
         loadingAnimated = false
         
         switch info.status {
         case "Alive":
-            view.backgroundColor = .green
+            viewStatus.backgroundColor = .green
         case "Dead":
-            view.backgroundColor = .red
+            viewStatus.backgroundColor = .red
         default:
-            view.backgroundColor = .gray
+            viewStatus.backgroundColor = .gray
         }
         
     }
@@ -175,19 +172,31 @@ class CharacterCollectionViewCell: UICollectionViewCell {
         characterStateLabel.text = ""
         characterImageView.isHidden = true
         loadingImageView.isHidden = false
+        viewStatus.isHidden = true
         loadingAnimated = true
         loadingAnimation()
-        view.backgroundColor = .white
         
     }
     
     func setupImage(image: UIImage?, itemNumber: Int){
 
         if self.itemNumber == itemNumber{
+            
             characterImageView.contentMode = .scaleAspectFill
+            
             if let image = image{
-                characterImageView.image = image
+                
+                switch info?.status ?? ""{
+                case "Alive":
+                    characterImageView.image = image
+                case "Dead":
+                    characterImageView.image = image.toBlackColorImage()
+                default:
+                    characterImageView.image = image
+                }
+                
             }
+            
         }
         
     }
@@ -210,4 +219,29 @@ class CharacterCollectionViewCell: UICollectionViewCell {
     
 }
 
+//MARK: Previews
 
+struct CharacterCollectionViewCell_Previews: PreviewProvider {
+    
+    static let character = Character(id: 0, name: "Rick Sanchez", status: "Alive", species: "", type: "", gender: "", origin: nil, location: nil, image: "", episode: [], url: "", created: "")
+    
+    static let widthSize = 200
+    static let heightSize = 300
+    
+    static var previews: some View{
+        ViewPreview{
+            let view = CharacterCollectionViewCell(frame: CGRect(x: 0, y: 0, width: widthSize, height: heightSize))
+            let characterViewmodel = CharacterViewModel()
+//            characterViewmodel.getImageCharacter(itemNumber:  0, url:  "https://rickandmortyapi.com/api/character/avatar/1.jpeg" ) { image,itemNumber in
+//                view.setupImage(image: image, itemNumber: itemNumber)
+//            }
+            //view.setupInfo(info: character, itemNumber: 0)
+            view.setupLoadingCard()
+            return view
+        }
+        .previewLayout(PreviewLayout.fixed(width: CGFloat(widthSize + 40), height: CGFloat(heightSize + 10)))
+        .padding(5)
+        .edgesIgnoringSafeArea(.all)
+    }
+    
+}

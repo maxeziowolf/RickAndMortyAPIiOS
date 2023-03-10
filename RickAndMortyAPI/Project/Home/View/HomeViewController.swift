@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class HomeViewController: UIViewController {
     
@@ -80,11 +81,20 @@ class HomeViewController: UIViewController {
         charactersImageView.clipsToBounds = true
         
         charactersImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openCollection)))
+        
     }
     
     @objc func openCollection(){
-        self.navigationController?.pushViewController(CharactersViewController(nibName: nil, bundle: nil), animated: true)
+//        self.navigationController?.pushViewController(CharactersViewController(nibName: nil, bundle: nil), animated: true)
     }
 
+}
+
+struct HomeViewController_Previews: PreviewProvider {
+    static var previews: some View{
+        ViewControllerPreview{
+            HomeViewController()
+        }
+    }
 }
 
