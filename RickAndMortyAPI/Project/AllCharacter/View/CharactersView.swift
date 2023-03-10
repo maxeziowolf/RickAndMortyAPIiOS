@@ -6,13 +6,16 @@
 //
 
 import UIKit
+import SwiftUI
 
 final class CharactersView: UIView {
+    
+    //MARK: UIComponets
     
     private let flowLayoutCollectionView: UICollectionViewFlowLayout = {
         let layaout = UICollectionViewFlowLayout()
         layaout.scrollDirection = .vertical
-        layaout.sectionInset = .init(top: 10, left: 20, bottom: 20, right: 20)
+        layaout.sectionInset = .init(top: 5, left: 5, bottom: 5, right: 5)
         layaout.minimumInteritemSpacing = 10
         layaout.minimumLineSpacing = 10
         return layaout
@@ -30,8 +33,9 @@ final class CharactersView: UIView {
         let label = UILabel()
         label.text = "0/000"
         label.font = .systemFont(ofSize: 15, weight: .bold)
-        label.textColor = .green
+        label.textColor = .white
         label.numberOfLines = 1
+        label.textAlignment = .right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -42,6 +46,34 @@ final class CharactersView: UIView {
         return barButtonItem
     }()
     
+    private let titleCharactersContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let imageCharacters: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(named: "image.characters")
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.masksToBounds = false
+        imageView.layer.cornerRadius = 60/2
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
+    private let labelCharacter: UILabel = {
+        let label = UILabel()
+        label.text = "Characters"
+        label.font = .systemFont(ofSize: 35, weight: .bold)
+        label.textColor = .white
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    //MARK: Inicializadores
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -59,23 +91,45 @@ final class CharactersView: UIView {
     }
     
     private func addSubviews(){
-        [characterCollectionview, labelCharacterCount].forEach(addSubview)
+        [titleCharactersContainer,characterCollectionview].forEach(addSubview)
+        [imageCharacters, labelCharacter, labelCharacterCount].forEach(titleCharactersContainer.addSubview)
     }
     
     private func configureConstraints(){
         
         NSLayoutConstraint.activate([
-            labelCharacterCount.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 10),
-            labelCharacterCount.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            labelCharacterCount.trailingAnchor.constraint(equalTo: trailingAnchor),
             
-            characterCollectionview.topAnchor.constraint(equalTo: labelCharacterCount.bottomAnchor, constant: 10),
+            titleCharactersContainer.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: 0),
+            titleCharactersContainer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            titleCharactersContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            
+            imageCharacters.topAnchor.constraint(equalTo: titleCharactersContainer.topAnchor, constant: 10),
+            imageCharacters.bottomAnchor.constraint(equalTo: titleCharactersContainer.bottomAnchor, constant: -10),
+            imageCharacters.leadingAnchor.constraint(equalTo: titleCharactersContainer.leadingAnchor, constant: 10),
+            imageCharacters.widthAnchor.constraint(equalToConstant: 60),
+            imageCharacters.heightAnchor.constraint(equalToConstant: 60),
+            
+            labelCharacter.topAnchor.constraint(greaterThanOrEqualTo: titleCharactersContainer.topAnchor),
+            labelCharacter.leadingAnchor.constraint(equalTo: imageCharacters.trailingAnchor, constant: 10),
+            labelCharacter.bottomAnchor.constraint(equalTo: imageCharacters.bottomAnchor),
+            
+            labelCharacterCount.topAnchor.constraint(greaterThanOrEqualTo: titleCharactersContainer.topAnchor),
+            labelCharacterCount.leadingAnchor.constraint(equalTo: labelCharacter.trailingAnchor, constant: 10),
+            labelCharacterCount.bottomAnchor.constraint(equalTo: labelCharacter.bottomAnchor),
+            labelCharacterCount.trailingAnchor.constraint(greaterThanOrEqualTo: titleCharactersContainer.trailingAnchor, constant: -10),
+            
+            
+            characterCollectionview.topAnchor.constraint(equalTo: titleCharactersContainer.bottomAnchor, constant: 10),
             characterCollectionview.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
             characterCollectionview.trailingAnchor.constraint(equalTo: trailingAnchor),
             characterCollectionview.leadingAnchor.constraint(equalTo: leadingAnchor)
         ])
         
+        labelCharacter.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        
     }
+    
+    //MARK: Functions
     
     public func setupNavigationbarConfig(navigationController: UINavigationController){
         
@@ -91,8 +145,8 @@ final class CharactersView: UIView {
     
     public func setupFlowLayaotConfig(width: CGFloat){
         
-        let widthSize = (width - 50)/2
-        let heightSize = (width)*(19/40)
+        let widthSize = (width - 20)/2
+        let heightSize = (width)*(25/40)
         
         flowLayoutCollectionView.itemSize = .init(width: widthSize, height: heightSize)
         
@@ -114,4 +168,13 @@ final class CharactersView: UIView {
         characterCollectionview.reloadData()
     }
     
+}
+
+//MAKR: Previews
+struct CharactersView_Previews: PreviewProvider {
+    static var previews: some View{
+        ViewControllerPreview{
+            CharactersViewController()
+        }
+    }
 }
